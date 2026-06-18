@@ -1,0 +1,18 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mini-cc"
+version = "0.1.0"
+description = "A minimal coding agent loop with tools and skills"
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=1.0.0",
+]
+
+[project.scripts]
+mini-cc = "mini_cc.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["mini_cc"]
