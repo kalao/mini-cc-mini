@@ -10,9 +10,13 @@ class Skill:
     name: str
     description: str
     prompt: str
+    skill_dir: str | None = None
 
     def expand(self, args: str = "") -> str:
-        return self.prompt.replace("$ARGUMENTS", args)
+        text = self.prompt.replace("$ARGUMENTS", args)
+        if self.skill_dir:
+            text = text.replace("$SKILL_DIR", self.skill_dir)
+        return text
 
 
 BUILTIN_SKILLS: dict[str, Skill] = {
@@ -91,7 +95,12 @@ def _load_skill(path: Path) -> Skill | None:
     meta, body = _split_frontmatter(text)
     name = str(meta.get("name") or path.parent.name)
     description = str(meta.get("description") or "")
-    return Skill(name=name, description=description, prompt=body.strip())
+    return Skill(
+        name=name,
+        description=description,
+        prompt=body.strip(),
+        skill_dir=str(path.parent),
+    )
 
 
 def _split_frontmatter(text: str) -> tuple[dict[str, str], str]:
